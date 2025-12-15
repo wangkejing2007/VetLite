@@ -49,7 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Detective if available
     // Initialize Detective if available
-    if (appData.clinicalCases) loadCase(0);
+    if (appData.clinicalCases) {
+        const lastCaseIndex = parseInt(localStorage.getItem('vetlite_last_case_index') || '0');
+        loadCase(lastCaseIndex);
+    }
 
     // Initialize Profile Stats (Sync Header)
     updateProfileStats();
@@ -451,6 +454,9 @@ function loadCase(index) {
     }
     currentCaseIndex = index;
     isCaseSolved = false;
+
+    // Save Progress
+    localStorage.setItem('vetlite_last_case_index', index);
 
     const caseData = appData.clinicalCases[index];
 
