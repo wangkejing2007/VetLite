@@ -797,6 +797,151 @@ main {
     margin-bottom: 16px;
 }
 
+/* ... existing code ... */
+.species-badge {
+    /* (This was cut off in previous view, assuming it ends here or I just append) */
+}
+
+/* Audio Button */
+.audio-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    z-index: 10;
+    /* Ensure clickable */
+}
+
+.audio-btn:hover {
+    background: var(--primary-color);
+    color: #0F172A;
+}
+
+.audio-btn.playing {
+    animation: pulse-audio 1s infinite;
+    background: var(--accent-light);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+@keyframes pulse-audio {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Review Mode Toggle */
+#btn-review-toggle.active-mode {
+    background: var(--accent-color);
+    color: #0F172A;
+    border-color: var(--accent-color);
+}
+
+/* Level Up Overlay */
+.level-up-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s;
+    backdrop-filter: blur(5px);
+}
+
+.level-up-content {
+    text-align: center;
+    transform: scale(0.8);
+    animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.level-up-content h1 {
+    font-size: 3rem;
+    background: linear-gradient(to right, #F59E0B, #FBBF24, #F59E0B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    font-weight: 900;
+    text-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+}
+
+.new-badge {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-body));
+    border: 2px solid var(--primary-color);
+    padding: 20px 40px;
+    border-radius: 20px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
+    margin-bottom: 20px;
+}
+
+.new-badge ion-icon {
+    font-size: 4rem;
+    color: var(--primary-color);
+    animation: spin-medal 3s infinite linear;
+}
+
+.new-badge span {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.level-up-content p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+@keyframes popUp {
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes spin-medal {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+/* Confetti (Simple dots) */
+.confetti-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
 .species-badge {
     padding: 4px 12px;
     border-radius: 99px;

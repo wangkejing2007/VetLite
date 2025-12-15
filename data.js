@@ -151,11 +151,47 @@ const appData = {
         { id: 28, category: "reptile", question: "爬蟲類(如陸龜)缺乏維生素D3與UVB會導致？", answer: "代謝性骨病 (MBD)", explanation: "導致龜殼軟化、骨折變形，是人為飼養最常見的問題。", difficulty: "normal" },
         { id: 29, category: "exotic", question: "天竺鼠無法自行合成哪種維生素？", answer: "維生素 C", explanation: "與人類一樣，天竺鼠必須每日透過蔬果攝取維生素C，否則會壞血病。", difficulty: "easy" },
         { id: 30, category: "surgery", question: "縫線規格中，2-0 與 4-0 哪一個比較細？", answer: "4-0", explanation: "數字越大越細。2-0 用於大狗皮膚，4-0 用於貓或腸道吻合。", difficulty: "normal" },
-        { id: 31, category: "pathology", question: "黃疸 (Jaundice) 是因為血液中堆積了什麼？", answer: "膽紅素 (Bilirubin)", explanation: "可能源自溶血(肝前)、肝病(肝性)或膽道阻塞(肝後)。", difficulty: "hard" },
-        { id: 32, category: "neurology", question: "癲癇發作時，飼主首要動作是？", answer: "移開周圍危險物品，保持安靜", explanation: "切勿將手伸入動物口中，牠們不會咬舌頭但會咬斷你的手指。", difficulty: "normal" },
-        { id: 33, category: "reproduction", question: "狗的懷孕期平均約為幾天？", answer: "63 天 (約2個月)", explanation: "範圍約在 58-68 天之間。貓的懷孕期也相當接近。", difficulty: "easy" },
-        { id: 34, category: "anesthesia", question: "插管前用於評估麻醉深度的反射是？", answer: "吞嚥反射 (Swallowing reflex) 消失", explanation: "當動物不再吞嚥且下顎張力鬆弛時，才可進行插管。", difficulty: "normal" },
-        { id: 35, category: "cardiology", question: "PDA (存開性動脈導管) 會聽到什麼特殊的雜音？", answer: "機械性雜音 (Machinery murmur)", explanation: "連續性的雜音，這是幼犬常見的先天性心臟病。", difficulty: "hard" },
+        {
+            id: 31,
+            category: "pathology",
+            question: "黃疸 (Jaundice) 是因為血液中堆積了什麼？",
+            answer: "膽紅素 (Bilirubin)",
+            explanation: "可能源自溶血(肝前)、肝病(肝性)或膽道阻塞(肝後)。",
+            difficulty: "hard"
+        },
+        {
+            id: 32,
+            category: "neurology",
+            question: "癲癇發作時，飼主首要動作是？",
+            answer: "移開周圍危險物品，保持安靜",
+            explanation: "切勿將手伸入動物口中，牠們不會咬舌頭但會咬斷你的手指。",
+            difficulty: "normal"
+        },
+        {
+            id: 33,
+            category: "reproduction",
+            question: "狗的懷孕期平均約為幾天？",
+            answer: "63 天 (約2個月)",
+            explanation: "範圍約在 58-68 天之間。貓的懷孕期也相當接近。",
+            difficulty: "easy"
+        },
+        {
+            id: 34,
+            category: "anesthesia",
+            question: "插管前用於評估麻醉深度的反射是？",
+            answer: "吞嚥反射 (Swallowing reflex) 消失",
+            explanation: "當動物不再吞嚥且下顎張力鬆弛時，才可進行插管。",
+            difficulty: "normal"
+        },
+        {
+            id: 35,
+            category: "cardiology",
+            question: "PDA (存開性動脈導管) 會聽到什麼特殊的雜音？",
+            answer: "機械性雜音 (Machinery murmur)",
+            explanation: "連續性的雜音，這是幼犬常見的先天性心臟病。",
+            difficulty: "hard",
+            audio: "murmur_pda.mp3"
+        },
         { id: 36, category: "public_health", question: "狂犬病 (Rabies) 的致死率約為？", answer: "接近 100%", explanation: "一旦發病，無論人或動物幾乎必死無疑，疫苗接種是唯一預防手段。", difficulty: "normal" },
         { id: 37, category: "clinical", question: "皮下注射英文縮寫是？", answer: "SC / SQ", explanation: "Subcutaneous。IV為靜脈，IM為肌肉，PO為口服。", difficulty: "easy" },
         { id: 38, category: "internal_med", question: "胰臟炎的快篩試劑檢測的是什麼數值？", answer: "cPL / fPL (特異性胰脂肪酶)", explanation: "比傳統的血檢 Amylase/Lipase 更準確。", difficulty: "normal" },
@@ -191,7 +227,15 @@ const appData = {
         { id: 68, category: "fluid", question: "脫水程度達多少%時，皮膚彈性會明顯變差(Tenting)？", answer: "5-8 %", explanation: "<5%臨床難以察覺，>10%會出現甚至休克徵兆。", difficulty: "normal" },
         { id: 69, category: "breed", question: "柯基犬 (Corgi) 斷尾的主要原因是？", answer: "歷史上牧牛需求，現多為外觀標準", explanation: "避免牛隻踩踏尾巴。現在許多國家已禁止美容性斷尾。", difficulty: "easy" },
         { id: 70, category: "parasitology", question: "毛囊蟲 (Demodex) 是會傳染給其他狗的嗎？", answer: "通常不會", explanation: "毛囊蟲是皮膚共生菌，發病多因「免疫力下降」，而非接觸傳染。", difficulty: "normal" },
-        { id: 71, category: "cardiology", question: "貓咪若突發雙後肢癱瘓、腳掌冰冷，是因為？", answer: "血栓 (ATE / Saddle Thrombus)", explanation: "90%源自心臟病(HCM)，血栓塞在主動脈分叉處。", difficulty: "hard" },
+        {
+            id: 71,
+            category: "cardiology",
+            question: "貓咪若突發雙後肢癱瘓、腳掌冰冷，是因為？",
+            answer: "血栓 (ATE / Saddle Thrombus)",
+            explanation: "90%源自心臟病(HCM)，血栓塞在主動脈分叉處。",
+            difficulty: "hard",
+            audio: "heart_saddle_thrombus.mp3"
+        },
         { id: 72, category: "neurology", question: "狂犬病疫苗法規規定犬貓多大需施打第一劑？", answer: "3 - 4 個月齡", explanation: "之後每年需補強一次，並配戴頸牌。", difficulty: "easy" },
         { id: 73, category: "surgery", question: "公貓導尿時，導尿管容易卡在哪個構造？", answer: "尿道球腺 (Bulbourethral gland) 轉彎處", explanation: "需將陰莖平行脊椎向後拉直，才能順利通過。", difficulty: "hard" },
         { id: 74, category: "nutrition", question: "木糖醇 (Xylitol) 對狗有劇毒，會導致？", answer: "低血糖 與 肝衰竭", explanation: "刺激胰島素大量釋放。常見於無糖口香糖。", difficulty: "normal" },
@@ -201,7 +245,15 @@ const appData = {
         { id: 78, category: "dermatology", question: "伍氏燈 (Wood's Lamp) 照出螢光綠色，代表感染？", answer: "犬小孢子菌 (Microsporum canis)", explanation: "這是最常見的皮黴菌(貓癬)病原，約50%菌株會發螢光。", difficulty: "normal" },
         { id: 79, category: "exotic", question: "天竺鼠若長期維生素C不足，會出現？", answer: "關節腫脹、牙齦出血、行動困難", explanation: "即壞血病 (Scurvy)。", difficulty: "normal" },
         { id: 80, category: "breed", question: "哪種狗狗對於麻醉藥特別敏感，因為體脂極低？", answer: "灰狗 (Greyhound) 等視覺獵犬", explanation: "巴比妥類藥物依靠脂肪重新分佈代謝，瘦狗代謝極慢。", difficulty: "hard" },
-        { id: 81, category: "clinical", question: "聽診時若聽到「破鑼音/濕囉音 (Crackles)」，代表？", answer: "肺泡內有液體 (肺水腫/肺炎)", explanation: "就像搓揉頭髮的聲音，暗示肺部積水。", difficulty: "normal" },
+        {
+            id: 81,
+            category: "clinical",
+            question: "聽診時若聽到「破鑼音/濕囉音 (Crackles)」，代表？",
+            answer: "肺泡內有液體 (肺水腫/肺炎)",
+            explanation: "就像搓揉頭髮的聲音，暗示肺部積水。",
+            difficulty: "normal",
+            audio: "lung_crackles.mp3"
+        },
         { id: 82, category: "genetics", question: "蘇格蘭摺耳貓 (Scottish Fold) 必定帶有什麼基因缺陷？", answer: "軟骨發育不全 (Osteochondrodysplasia)", explanation: "摺耳即是軟骨缺陷的表現，四肢關節最終都會骨質增生劇痛。", difficulty: "normal" },
         { id: 83, category: "surgery", question: "卵巢子宮切除術 (OHE) 必須移除？", answer: "雙側卵巢 與 整個子宮", explanation: "只移除卵巢或只結紮輸卵管，未來仍可能發生子宮蓄膿。", difficulty: "normal" },
         { id: 84, category: "poison", question: "老鼠藥中毒通常是哪種類型？", answer: "抗凝血劑 (Anticoagulant)", explanation: "阻斷維生素K循環，導致內出血。解毒劑為 Vitamin K1。", difficulty: "normal" },
@@ -393,6 +445,7 @@ const appData = {
             species: "dog",
             patient: "來福 (米格魯)",
             symptom: "突然發出像鵝叫的乾咳聲 (Honking cough)，尤其在興奮或拉牽繩時更明顯。",
+            audio: "cough_kennel.mp3",
             options: [
                 { id: "a", text: "犬舍咳 (Kennel Cough)", correct: true, feedback: "正確！這是一種傳染性氣管支氣管炎，常見於群聚感染，會自癒或需抗生素治療。" },
                 { id: "b", text: "心臟病引發的咳嗽", correct: false, feedback: "錯誤。心臟病咳通常是濕咳且在夜間嚴重。鵝叫聲更偏向氣管問題。" },
@@ -998,6 +1051,7 @@ const appData = {
             species: "dog",
             patient: "馬爾濟斯",
             symptom: "心臟聽診有雜音，且半夜容易咳嗽，運動不耐，X光顯示心臟變大。",
+            audio: "murmur_mitral.mp3",
             options: [
                 { id: "a", text: "二尖瓣逆流 (MMVD)", correct: true, feedback: "正確！小型老犬極常見的心臟病。瓣膜退化導致血液逆流，造成肺水腫。" },
                 { id: "b", text: "心絲蟲", correct: false, feedback: "錯誤。雖也有可能，但小型老犬機率最高的是瓣膜疾病。" },

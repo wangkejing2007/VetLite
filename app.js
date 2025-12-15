@@ -1,6 +1,8 @@
 // State
 let currentCardIndex = 0;
 let isFlipped = false;
+let isReviewMode = false;
+let activeFlashcards = []; // For filtering
 
 // DOM Elements
 // DOM Elements
@@ -30,6 +32,12 @@ const anatomyModal = document.getElementById('anatomy-modal');
 document.addEventListener('DOMContentLoaded', () => {
     loadDailyTerm();
 
+    // Initialize User Flashcards
+    loadUserCards();
+
+    // Default active set
+    activeFlashcards = appData.flashcards;
+
     // Load last viewed card or default to 0
     const lastIndex = parseInt(localStorage.getItem('vetlite_last_card_index') || '0');
     loadCard(lastIndex);
@@ -45,9 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Profile Stats (Sync Header)
     updateProfileStats();
-
-    // Initialize User Flashcards
-    loadUserCards();
 });
 
 function loadUserCards() {
@@ -112,7 +117,7 @@ function saveNewCard() {
 
 // Global Exports
 window.openAddCardModal = openAddCardModal;
-window.closeAddCardModal = closeAddCardModal;
+window.closeAddCardModal = closeAddAddCardModal;
 window.saveNewCard = saveNewCard;
 
 // Navigation
@@ -192,28 +197,47 @@ function trackFlashcardSeen(index) {
 }
 
 function loadCard(index) {
-    if (!appData.flashcards) return;
-    if (index >= appData.flashcards.length) {
+    if (!activeFlashcards || activeFlashcards.length === 0) {
+        if (isReviewMode) {
+            alert("錯題本是空的！請先去練習並標記一些「還不熟」的卡片。");
+            toggleReviewMode();
+        }
+        return;
+    }
+
+    if (index >= activeFlashcards.length) {
         index = 0; // Loop back
     }
     currentCardIndex = index;
-    const data = appData.flashcards[index];
+    const data = activeFlashcards[index];
 
     // Update text
     const qEl = document.getElementById('card-question');
     const aEl = document.getElementById('card-answer');
     const eEl = document.getElementById('card-explanation');
+    const audioBtn = document.getElementById('card-audio-btn');
 
     if (qEl) qEl.innerText = data.question;
     if (aEl) aEl.innerText = data.answer;
     if (eEl) eEl.innerText = data.explanation;
 
-    // Reset state
+    // Audio Button Logic
+    if (audioBtn) {
+        if (data.audio) {
+            audioBtn.classList.remove('hidden');
+        } else {
+            audioBtn.classList.add('hidden');
+        }
+    }
+
     // Reset state
     flashcardFlip(false);
 
-    // Save progress
-    localStorage.setItem('vetlite_last_card_index', index);
+    // Save progress (Reference index in current set)
+    // In review mode we don't save index to main progress
+    if (!isReviewMode) {
+        localStorage.setItem('vetlite_last_card_index', index);
+    }
 }
 
 function nextCard() {
@@ -222,7 +246,112 @@ function nextCard() {
 
 function handleCardResult(result) {
     console.log(`User marked card ${currentCardIndex} as ${result}`);
+
+    const currentCard = activeFlashcards[currentCardIndex];
+
+    if (result === 'hard') {
+        // Add to review list
+        const reviewList = JSON.parse(localStorage.getItem('vetlite_review_list') || '[]');
+        if (!reviewList.includes(currentCard.id)) {
+            reviewList.push(currentCard.id);
+            localStorage.setItem('vetlite_review_list', JSON.stringify(reviewList));
+        }
+    } else if (result === 'easy' && isReviewMode) {
+        // Remove from review list if mastered
+        let reviewList = JSON.parse(localStorage.getItem('vetlite_review_list') || '[]');
+        reviewList = reviewList.filter(id => id !== currentCard.id);
+        localStorage.setItem('vetlite_review_list', JSON.stringify(reviewList));
+
+        // Update current view list
+        activeFlashcards = activeFlashcards.filter(c => c.id !== currentCard.id);
+        if (activeFlashcards.length === 0) {
+            alert('恭喜！你已經複習完所有錯題了！');
+            toggleReviewMode();
+            return;
+        }
+    }
+
     nextCard();
+}
+
+function toggleReviewMode() {
+    isReviewMode = !isReviewMode;
+    const btn = document.getElementById('btn-review-toggle');
+
+    if (isReviewMode) {
+        btn.classList.add('active-mode');
+        // Filter cards
+        const reviewList = JSON.parse(localStorage.getItem('vetlite_review_list') || '[]');
+        activeFlashcards = appData.flashcards.filter(c => reviewList.includes(c.id));
+
+        if (activeFlashcards.length === 0) {
+            alert('目前沒有標記為「還不熟」的卡片喔！');
+            toggleReviewMode(); // revert
+            return;
+        }
+    } else {
+        btn.classList.remove('active-mode');
+        activeFlashcards = appData.flashcards;
+    }
+
+    loadCard(0);
+}
+
+// Audio Logic
+function playAudio(e, type = 'card') {
+    e.stopPropagation(); // prevent card flip
+    const btn = e.currentTarget;
+    if (btn.classList.contains('playing')) return;
+
+    btn.classList.add('playing');
+
+    // Simulate playing (Since we don't have real files)
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<ion-icon name="volume-high"></ion-icon> 播放中...';
+
+    setTimeout(() => {
+        btn.classList.remove('playing');
+        btn.innerHTML = originalText;
+    }, 2000);
+}
+
+// Level Up Logic
+function closeLevelUp() {
+    document.getElementById('level-up-overlay').classList.add('hidden');
+}
+
+function createConfetti() {
+    const container = document.querySelector('.confetti-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const colors = ['#38BDF8', '#34D399', '#F43F5E', '#FBBF24', '#A78BFA'];
+
+    for (let i = 0; i < 50; i++) {
+        const dot = document.createElement('div');
+        dot.style.position = 'absolute';
+        dot.style.width = '10px';
+        dot.style.height = '10px';
+        dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.top = '-10px';
+        dot.style.borderRadius = '50%';
+        dot.style.opacity = Math.random();
+        dot.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+        container.appendChild(dot);
+    }
+
+    // Dynamically add keyframes if not exists
+    if (!document.getElementById('confetti-style')) {
+        const style = document.createElement('style');
+        style.id = 'confetti-style';
+        style.innerHTML = `
+            @keyframes fall {
+                to { transform: translateY(100vh) rotate(720deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
 // Anatomy Logic
@@ -450,6 +579,21 @@ function updateProfileStats() {
     if (currentXp >= 700) role = "Lv. 4 專科醫師";
     if (currentXp >= 1000) role = "Lv. 5 院長級";
 
+    // Gamification Check: Level Up
+    const previousRole = localStorage.getItem('vetlite_last_role') || "Lv. 1 見習生";
+    if (role !== previousRole && currentXp > 0) {
+        // Trigger Level Up Modal
+        const overlay = document.getElementById('level-up-overlay');
+        const badgeTitle = document.getElementById('new-level-title');
+
+        if (overlay && badgeTitle) {
+            badgeTitle.innerText = role;
+            overlay.classList.remove('hidden');
+            createConfetti();
+        }
+        localStorage.setItem('vetlite_last_role', role);
+    }
+
     if (xpBar) xpBar.style.width = `${progress}%`;
     if (xpText) xpText.innerText = `EXP: ${currentXp} / ${maxXp}`;
     if (roleEl) roleEl.innerText = role;
@@ -482,3 +626,6 @@ window.loadCase = loadCase;
 window.checkCaseAnswer = checkCaseAnswer;
 window.loadNextCase = loadNextCase;
 window.resetData = resetData;
+window.toggleReviewMode = toggleReviewMode;
+window.playAudio = playAudio;
+window.closeLevelUp = closeLevelUp;
